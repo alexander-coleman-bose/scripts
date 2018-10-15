@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+
+# Alex Coleman
+# 2018/09/23
+
 set -e
 
 if [ -z "$1" ]; then

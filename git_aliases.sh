@@ -1,4 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Alex Coleman
+# 2018/10/15
+
+echo "Setting Git aliases..."
 
 # Git config options & aliases
 # git config --global submodule.recurse true
