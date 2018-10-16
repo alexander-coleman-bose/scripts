@@ -1,6 +1,9 @@
 #!/bin/bash
 # Installs Alex's custom PREQ setup from standard PREQ5 image
 
+# Alex Coleman
+# 2018/10/16
+
 # Check for argument to force the installation
 ARG1=$1
 if [ "$ARG1" = "-f" ] || [ "$ARG1" = "--force" ]
