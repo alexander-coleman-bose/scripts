@@ -53,4 +53,7 @@ fi
 #   status  WHICH info to suppress outputting to stder
 # dd if=$ISO of=$DISK_PARTITION bs=4M status=progress && sync
 
-dd if=$ISO of=$DISK_PARTITION bs=4M && sync
+sudo dd if=$ISO of=$DISK_PARTITION bs=4M && sync
+
+echo "Don't forget to set the bootable flag on the disk partition!"
+# sudo parted /dev/sdb set 1 boot on
