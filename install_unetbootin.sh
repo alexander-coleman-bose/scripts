@@ -8,4 +8,4 @@ echo "Installing unetbootin..."
 
 sudo add-apt-repository -y ppa:gezakovacs/ppa
 sudo apt-get update
-sudo apt-get install -y install unetbootin
+sudo apt-get install -y unetbootin
