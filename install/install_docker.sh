@@ -19,7 +19,7 @@ sudo add-apt-repository \
 sudo apt-get update
 
 # Install Docker
-sudo apt-get install docker-ce
+sudo apt-get install -y docker-ce
 
 # Add current user to the docker group
 sudo groupadd docker

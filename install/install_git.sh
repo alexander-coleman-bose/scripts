@@ -9,6 +9,6 @@ echo "Updating git and installing Git LFS..."
 sudo add-apt-repository -y ppa:git-core/ppa
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
 
-sudo apt-get install -y --only-upgrade git git-lfs
+sudo apt-get install -y git git-lfs
 
 git lfs install

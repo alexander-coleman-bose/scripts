@@ -1,17 +1,33 @@
 #!/bin/bash
-# Installs Alex's custom Ubuntu setup from standard PREQ5 image
+# Installs Alex's custom Ubuntu setup for Ubuntu 18.04
+
+# Handle -y input
+if [ "$1" == "-y" ]; then
+    YES=true
+fi
+
+upgrade_packages () {
+    sudo apt update
+    sudo apt upgrade -y
+}
+
+PACKAGES="net-utils ssh curl"
+install_packages () {
+    sudo apt update
+    sudo apt install -y "$PACKAGES"
+}
 
 install_git () {
     if [ -z $(which git) ] || [ -z $(which git-lfs) ]; then
         bash install/install_git.sh
     else
-        echo "Git and Git LFS are already instaleld."
+        echo "Git and Git LFS are already installed."
     fi
 }
 
 install_miniconda3 () {
     if [ -z $(which conda) ]; then
-        bash install/install_miniconda3.sh
+        sudo bash install/install_miniconda3.sh
     else
         echo "Anaconda/Miniconda is already installed."
     fi
@@ -41,28 +57,96 @@ install_vscode () {
     fi
 }
 
+install_wireshark () {
+    if [ -z $(which wireshark) ]; then
+        sudo apt update
+        sudo apt install -y wireshark
+        sudo dpkg-reconfigure wireshark-common
+    else
+        echo "VS Code already installed."
+    fi
+}
+
 # Choose what to install:
-echo "Install Git/Git LFS? (Y/n)"
-read choice
-if [ -z $choice ]; then choice=y; fi
+if [ "$YES" != "true" ]; then
+    echo "Upgrade all packages? (Y/n)"
+    read choice
+    if [ -z $choice ]; then choice=y; fi
+else
+    choice="y"
+fi
+if [ "$choice" == "y" ]; then upgrade_packages; fi
+
+if [ "$YES" != "true" ]; then
+    echo "Install recommended packages? (Y/n)"
+    echo "($PACKAGES)"
+    read choice
+    if [ -z $choice ]; then choice=y; fi
+else
+    choice="y"
+fi
+if [ "$choice" == "y" ]; then install_packages; fi
+
+if [ "$YES" != "true" ]; then
+    echo "Install Git/Git LFS? (Y/n)"
+    read choice
+    if [ -z $choice ]; then choice=y; fi
+else
+    choice="y"
+fi
 if [ "$choice" == "y" ]; then install_git; fi
 
-echo "Install Miniconda3? (Y/n)"
-read choice
-if [ -z $choice ]; then choice=y; fi
-if [ "$choice" == "y" ]; then install_git; fi
+if [ "$YES" != "true" ]; then
+    echo "Add extra Git aliases? (Y/n)"
+    read choice
+    if [ -z $choice ]; then choice=y; fi
+else
+    choice="y"
+fi
+if [ "$choice" == "y" ]; then bash git_aliases.sh; fi
 
-echo "Install Git Bash Prompt? (Y/n)"
-read choice
-if [ -z $choice ]; then choice=y; fi
-if [ "$choice" == "y" ]; then install_git; fi
+if [ "$YES" != "true" ]; then
+    echo "Install Miniconda3? (Y/n)"
+    read choice
+    if [ -z $choice ]; then choice=y; fi
+else
+    choice="y"
+fi
+if [ "$choice" == "y" ]; then install_miniconda3; fi
 
-echo "Install Docker? (Y/n)"
-read choice
-if [ -z $choice ]; then choice=y; fi
-if [ "$choice" == "y" ]; then install_git; fi
+if [ "$YES" != "true" ]; then
+    echo "Install Bash Git Prompt? (Y/n)"
+    read choice
+    if [ -z $choice ]; then choice=y; fi
+else
+    choice="y"
+fi
+if [ "$choice" == "y" ]; then install_bash_git_prompt; fi
 
-echo "Install VS Code? (Y/n)"
-read choice
-if [ -z $choice ]; then choice=y; fi
-if [ "$choice" == "y" ]; then install_git; fi
+if [ "$YES" != "true" ]; then
+    echo "Install Docker? (Y/n)"
+    read choice
+    if [ -z $choice ]; then choice=y; fi
+else
+    choice="y"
+fi
+if [ "$choice" == "y" ]; then install_docker; fi
+
+if [ "$YES" != "true" ]; then
+    echo "Install VS Code? (Y/n)"
+    read choice
+    if [ -z $choice ]; then choice=y; fi
+else
+    choice="y"
+fi
+if [ "$choice" == "y" ]; then install_vscode; fi
+
+if [ "$YES" != "true" ]; then
+    echo "Install Wireshark? (Y/n)"
+    read choice
+    if [ -z $choice ]; then choice=y; fi
+else
+    choice="y"
+fi
+if [ "$choice" == "y" ]; then install_wireshark; fi
+
