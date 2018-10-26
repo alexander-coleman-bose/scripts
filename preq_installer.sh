@@ -22,7 +22,7 @@ if [ "$FORCE_FLAG" = "false" ] && git-lfs --version > /dev/null
 then
     echo "git-lfs is already installed: $(git-lfs --version)"
 else
-    bash install_git.sh
+    bash install/install_git.sh
 fi
 
 # Git config options & aliases
@@ -37,7 +37,7 @@ then
     echo "conda version: $(conda --version)"
     echo "Current python3: $(which python3)"
 else
-    bash install_anaconda3.sh
+    bash install/install_anaconda3.sh
 fi
 
 # Visual Studio Code
@@ -45,7 +45,7 @@ if [ "$FORCE_FLAG" = "false" ] && code --version > /dev/null
 then
     echo "VS Code is already installed: $(code --version)"
 else
-    bash install_vscode.sh
+    bash install/install_vscode.sh
 fi
 
 # Add Intel/Realtek sound cards to devices
@@ -62,7 +62,7 @@ if [ "$FORCE_FLAG" = "false" ] && [ -d ~/.bash-git-prompt ]
 then
     echo "magicmonty/bash-git-prompt already installed"
 else
-    bash install_bash_git_prompt.sh
+    bash install/install_bash_git_prompt.sh
 fi
 
 # Return to the original directory
