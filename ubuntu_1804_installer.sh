@@ -11,7 +11,7 @@ upgrade_packages () {
     sudo apt upgrade -y
 }
 
-PACKAGES="net-utils ssh curl"
+PACKAGES="net-utils ssh curl gparted cifs-utils nmap nfs-common"
 install_packages () {
     sudo apt update
     sudo apt install -y "$PACKAGES"
