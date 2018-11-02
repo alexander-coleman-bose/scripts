@@ -1,8 +1,11 @@
+#!/usr/bin/env bash
 # Download and execute miniconda3 installer script
 # Alex Coleman
 
 TMP_DIR=/tmp
 INSTALL_DIR=${1:-$HOME/miniconda3}
+
+echo "Installing Miniconda3 to $INSTALL_DIR"
 
 # Download the Miniconda3 Installer
 curl https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -sSf -o $TMP_DIR/miniconda.sh
