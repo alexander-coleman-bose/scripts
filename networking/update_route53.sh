@@ -3,17 +3,15 @@
 set -e
 
 status=0
+# The host name for which you want to change the DNS IP address
 hostnames="mydynamichost.example.com mydynamichost2.example.com"
+# The AWS id for the zone containing the record, obtained by logging into aws route53
+zoneid=XYZABC123
+# The name server for the zone, can also be obtained from route53
+nameserver=ns-001.awsdns-01.com
+# Optional -- Uncomment to use the credentials for a named profile
+#export AWS_PROFILE=examplecom
 for hostname in $hostnames; do 
-    # The host name for which you want to change the DNS IP address
-    # hostname=mydynamichost.example.com
-    # The AWS id for the zone containing the record, obtained by logging into aws route53
-    zoneid=XYZABC123
-    # The name server for the zone, can also be obtained from route53
-    nameserver=ns-001.awsdns-01.com
-    # Optional -- Uncomment to use the credentials for a named profile
-    #export AWS_PROFILE=examplecom
-
     # Get your external IP address using opendns service
     newip=`dig +short myip.opendns.com @resolver1.opendns.com`
     if [[ ! $newip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
