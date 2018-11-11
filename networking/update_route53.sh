@@ -17,7 +17,7 @@ for hostname in $hostnames; do
     if [[ ! $newip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
     then
         echo "Could not get current IP address: $newip"
-        status=$status
+        status+=$status
         continue
     fi
 
@@ -26,7 +26,7 @@ for hostname in $hostnames; do
     if [[ ! $oldip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
     then
         echo "Could not get old IP address: $oldip"
-        status=$status
+        status+=$status
         continue
     fi
 
