@@ -2,40 +2,42 @@
 # https://blog.ostermiller.org/route53-dynamic-dns
 set -e
 
-# The host name for which you want to change the DNS IP address
-hostname=mydynamichost.example.com
-# The AWS id for the zone containing the record, obtained by logging into aws route53
-zoneid=XYZABC123
-# The name server for the zone, can also be obtained from route53
-nameserver=ns-001.awsdns-01.com
-# Optional -- Uncomment to use the credentials for a named profile
-#export AWS_PROFILE=examplecom
+status=0
+hostnames="mydynamichost.example.com mydynamichost2.example.com"
+for hostname in $hostnames; do 
+    # The host name for which you want to change the DNS IP address
+    # hostname=mydynamichost.example.com
+    # The AWS id for the zone containing the record, obtained by logging into aws route53
+    zoneid=XYZABC123
+    # The name server for the zone, can also be obtained from route53
+    nameserver=ns-001.awsdns-01.com
+    # Optional -- Uncomment to use the credentials for a named profile
+    #export AWS_PROFILE=examplecom
 
-# Get your external IP address using opendns service
-newip=`dig +short myip.opendns.com @resolver1.opendns.com`
-if [[ ! $newip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
-then
-    echo "Could not get current IP address: $newip"
-    exit 1
-fi
+    # Get your external IP address using opendns service
+    newip=`dig +short myip.opendns.com @resolver1.opendns.com`
+    if [[ ! $newip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+    then
+        echo "Could not get current IP address: $newip"
+        status=$status
+        continue
+    fi
 
-# Get the IP address record that AWS currently has, using AWS's DNS server
-oldip=`dig +short "$hostname" @"$nameserver"`
-if [[ ! $oldip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
-then
-    echo "Could not get old IP address: $oldip"
-    exit 1
-fi
+    # Get the IP address record that AWS currently has, using AWS's DNS server
+    oldip=`dig +short "$hostname" @"$nameserver"`
+    if [[ ! $oldip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+    then
+        echo "Could not get old IP address: $oldip"
+        status=$status
+        continue
+    fi
 
-# Bail if everything is already up to date
-if [ "$newip" == "$oldip" ]
-then
-    exit 0
-fi
+    # Bail if everything is already up to date
+    if [ "$newip" == "$oldip" ]; then continue; fi
 
-# aws route53 client requires the info written to a JSON file
-tmp=$(mktemp /tmp/dynamic-dns.XXXXXXXX)
-cat > ${tmp} << EOF
+    # aws route53 client requires the info written to a JSON file
+    tmp=$(mktemp /tmp/dynamic-dns.XXXXXXXX)
+    cat > ${tmp} << EOF
 {
     "Comment": "Auto updating @ `date`",
     "Changes": [{
@@ -50,7 +52,11 @@ cat > ${tmp} << EOF
 }
 EOF
 
-echo "Changing IP address of $hostname from $oldip to $newip"
-aws route53 change-resource-record-sets --hosted-zone-id $zoneid --change-batch "file://$tmp"
+    echo "Changing IP address of $hostname from $oldip to $newip"
+    aws route53 change-resource-record-sets --hosted-zone-id $zoneid --change-batch "file://$tmp"
 
-rm "$tmp"
+    rm "$tmp"
+done
+
+# Return the number of failures as exit status
+exit $status
