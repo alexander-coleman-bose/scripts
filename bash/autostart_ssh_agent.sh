@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Script to start/find ssh-agent on login
 # Author: Alex Coleman
 # Source: https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login

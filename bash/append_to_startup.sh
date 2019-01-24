@@ -13,28 +13,34 @@
 
 this="append_to_startup.sh"
 
-# Handle input
-if [ -z "$2" ]; then
-    TARGET="$HOME/.bashrc"
-else
-    TARGET="$2"
-fi
+# Handle content input
 if [ -z "$1" ]; then
     echo >&2 "$this: You must specifiy content to load into the target file."
+    exit 1
 elif [ -r "$1" ]; then
-    CONTENT=$(cat "$1")
+    content=$(cat "$1")
 else
-    CONTENT="$1"
+    content="$1"
 fi
 
-# Write CONTENT to a file so that we can sed it
+# Handle target input
+if [ -z "$2" ]; then
+    target="$HOME/.bashrc"
+else
+    target="$2"
+fi
+if [ ! -w "$target" ]; then
+    echo >&2 "ERROR:$this: $target was not writable."
+    exit 1
+fi
 
-# If the first and/or last lines of the content are empty, remove them
+# Generate a time-stamped header line
+header="# Appended on $(date)"
 
-# Prepend date string to the CONTENT
-
-# If the last line of TARGET is not empty, append an empty line
+# Remove any hash-bangs and any empty lines, but add one trailing newline
+# shellcheck disable=SC1003
+echo "$content" | sed -e '/^ *$/d' -e '/^#!/d;' | sed -e "1s/^/\n$header\n/" | sed -e '$a\' > /tmp/content
 
 # Append the CONTENT
-
-# Append an empty line to TARGET
+cat /tmp/content >> "$target"
+rm /tmp/content
