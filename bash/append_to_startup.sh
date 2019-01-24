@@ -15,7 +15,7 @@ this="append_to_startup.sh"
 
 # Handle input
 if [ -z "$2" ]; then
-    TARGET="~/.bashrc"
+    TARGET="$HOME/.bashrc"
 else
     TARGET="$2"
 fi
