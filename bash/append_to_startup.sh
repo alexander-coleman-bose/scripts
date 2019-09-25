@@ -11,7 +11,7 @@
 # Usage:
 #   append_to_startup.sh CONTENT_FILE TARGET_FILE
 
-this="append_to_startup.sh"
+this="${BASH_SOURCE[0]}"
 
 # Handle content input
 if [ -z "$1" ]; then

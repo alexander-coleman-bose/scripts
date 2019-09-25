@@ -7,7 +7,7 @@
 
 # Store initial directory and switch to /tmp
 ORIG_PWD="$PWD"
-cd "/tmp"
+cd "/tmp" || exit 1
 
 # Download the tar file
 FILENAME=noip-duc-linux.tar.gz
@@ -18,7 +18,7 @@ curl -o "$ARCHIVE" https://www.noip.com/client/linux/"$FILENAME"
 tar xzf "$ARCHIVE"
 
 # Install (interactive, requires login/password from noip.com)
-cd noip*
+cd noip* || exit 1
 make
 sudo make install
 sudo chmod 666 /usr/local/etc/no-ip2.conf
@@ -53,4 +53,4 @@ rm -rf /tmp/tar-noip*
 rm -rf /tmp/._noip*
 
 # Return to the original directory
-cd "$ORIG_DIR"
+cd "$ORIG_PWD" || exit 1

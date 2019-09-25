@@ -11,9 +11,9 @@ git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt -
 
 # Append bash-git-prompt config to .bashrc?
 if [ -z "$1" ]; then
-    read -p "Apply bash-git-prompt now (append to .bashrc)? (Y/n)" choice
+    read -rp "Apply bash-git-prompt now (append to .bashrc)? (Y/n)" choice
     if [ -z "$choice" ]; then choice=y; fi
-elif [ "$1" == "-h" ] || "$1" == "--help" ]
+elif [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
     echo "Usage: install_bash_git_prompt.sh [OPTIONS]"
     echo ""
     echo "This script installs the github.com/magicmonty/bash-git-prompt project."
@@ -30,6 +30,7 @@ if [ "$choice" == "-y" ] || [ "$choice" == "y" ] || [ "$choice" == "Y" ] || [ "$
 fi
 
 if [ "$choice" == "y" ]; then
+    # shellcheck disable=SC2129
     echo -e "\n" >> ~/.bashrc
     echo "# Appended by magicmonty/bash-git-prompt" >> ~/.bashrc
     echo "GIT_PROMPT_ONLY_IN_REPO=1" >> ~/.bashrc

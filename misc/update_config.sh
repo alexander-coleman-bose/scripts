@@ -2,7 +2,10 @@
 # Script to update scripts repos with most recent package config
 
 # If no input
-if [ -z ]
+if [ -z "$1" ]; then
+    echo >&2 "No inputs"
+    exit 1
+fi
 
 # Handle N inputs
 while [[ $# -gt 0 ]]; do
@@ -31,6 +34,7 @@ while [[ $# -gt 0 ]]; do
         --zsh_aliases)
             echo "Updating .zsh_aliases"
             shift
+            ;;
         *)
             echo "Updating $key"
             shift

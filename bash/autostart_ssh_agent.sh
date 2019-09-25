@@ -10,7 +10,7 @@ function start_agent {
     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
     echo succeeded
     chmod 600 "${SSH_ENV}"
-    . "${SSH_ENV}" > /dev/null
+    source "${SSH_ENV}" > /dev/null
 
     # Add existing keys to ssh-agent
     for f in ~/.ssh/id_*[!.pub]; do
@@ -20,9 +20,9 @@ function start_agent {
 
 # Source SSH settings, if applicable
 if [ -f "${SSH_ENV}" ]; then
-    . "${SSH_ENV}" > /dev/null
+    source "${SSH_ENV}" > /dev/null
     #ps ${SSH_AGENT_PID} doesn't work under cywgin
-    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+    ps -ef | grep "${SSH_AGENT_PID}" | grep ssh-agent$ > /dev/null || {
         start_agent;
     }
 else

@@ -18,13 +18,13 @@ fi
 if [ -z "$1" ]; then
     echo "Specify an ISO file to clone from:"
 
-    read ISO
+    read -r ISO
 
-    if [ -z $ISO ] || [ ! -r $ISO ]; then
+    if [ -z "$ISO" ] || [ ! -r "$ISO" ]; then
         echo "ERROR: You MUST specify a valid ISO file."
         exit $STATUS_ERROR
     fi
-elif [ ! -r $1 ]; then
+elif [ ! -r "$1" ]; then
     echo "ERROR: You MUST specify a valid ISO file."
     exit $STATUS_ERROR
 else
@@ -35,13 +35,13 @@ fi
 if [ -z "$2" ]; then
     echo "Specify a disk partition to clone to:"
 
-    read DISK_PARTITION
+    read -r DISK_PARTITION
 
-    if [ -z $DISK_PARTITION ] || [ ! -b $DISK_PARTITION ]; then
+    if [ -z "$DISK_PARTITION" ] || [ ! -b "$DISK_PARTITION" ]; then
         echo "ERROR: You MUST specify a disk partition."
         exit $STATUS_ERROR
     fi
-elif [ ! -b $2 ]; then
+elif [ ! -b "$2" ]; then
     echo "ERROR: You MUST specify a disk partition."
     exit $STATUS_ERROR
 else
@@ -53,7 +53,7 @@ fi
 #   status  WHICH info to suppress outputting to stder
 # dd if=$ISO of=$DISK_PARTITION bs=4M status=progress && sync
 
-sudo dd if=$ISO of=$DISK_PARTITION bs=4M && sync
+sudo dd if="$ISO" of="$DISK_PARTITION" bs=4M && sync
 
 echo "Don't forget to set the bootable flag on the disk partition!"
 # sudo parted /dev/sdb set 1 boot on
