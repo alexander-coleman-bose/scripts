@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 # Alex Coleman
-# 2018/10/15
+# 2021/02/26
 
 echo "Setting Git aliases..."
+set -x
 
 # Git config options & aliases
 # git config --global submodule.recurse true
@@ -26,8 +27,8 @@ git config --global --replace-all alias.master '!git checkout master && git pull
 git config --global --replace-all alias.find '!git ls-files | grep -i'
 git config --global --replace-all alias.grep 'grep -Ii'
 git config --global --replace-all alias.la '!git config -l | grep alias | cut -c 7-'
-git config --global --replace-all alias.ls 'log --pretty=format:"%C(yellow)%h %Cred%cr %Cblue(%an)%C(cyan)%d%Creset %s" --decorate'
-git config --global --replace-all alias.ll 'log --pretty=format:"%C(yellow)%h %Cred%cr %Cblue(%an)%C(cyan)%d%Creset %s" --decorate --stat'
+git config --global --replace-all alias.ls 'log --pretty=format:"%C(yellow)%h %Cred%cr %Creset%s%C(cyan)%d %Cblue[%an]" --decorate'
+git config --global --replace-all alias.ll 'log --pretty=format:"%C(yellow)%h %Cred%cr %Creset%s%C(cyan)%d %Cblue[%an]" --decorate --stat'
 git config --global --replace-all alias.po 'push origin'
 git config --global --replace-all alias.pod 'push origin dev'
 git config --global --replace-all alias.pos 'push origin staging'
@@ -42,5 +43,5 @@ git config --global --replace-all alias.rim 'rebase -i master'
 git config --global --replace-all alias.rpo 'remote prune origin'
 git config --global --replace-all alias.sur 'submodule update --init --recursive'
 git config --global --replace-all alias.st 'status'
-git config --global --replace-all alias.tree 'log --pretty=format:"%C(yellow)%h %Cred%cr %Cblue(%an)%C(cyan)%d%Creset %s" --decorate --graph --all'
-git config --global --replace-all alias.unstage 'reset --soft HEAD^'
+git config --global --replace-all alias.tree 'log --pretty=format:"%C(yellow)%h %Cred%cr%C(cyan)%d %Creset%s %Cblue[%an]" --decorate --graph --abbrev-commit --all'
+git config --global --replace-all alias.uncommit 'reset --soft HEAD~'
