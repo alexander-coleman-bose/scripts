@@ -1,0 +1,7 @@
+{
+    // File associations
+    "files.associations": {
+        ".zsh_aliases": "shellscript",
+        "give-access-to": "shellscript"
+    },
+}

@@ -1,0 +1,33 @@
+# This file is used to run a Microsoft SQL Server 2017 server locally in a
+# Docker container. The database should not be exposed outside of the localhost.
+
+# By running this file, you accepting Microsoft's EULA. This container runs the
+# SQL Server Developer edition, which to my understanding is free to use, as
+# long as it is not used in a production environment.
+
+# MS Docker Hub: https://hub.docker.com/_/microsoft-mssql-server
+# MS EULA: https://go.microsoft.com/fwlink/?linkid=857698
+
+# Resources: https://cardano.github.io/blog/2017/11/15/mssql-docker-container
+
+# Alex Coleman
+
+version: '3'
+
+services:
+  mssql:
+    image: microsoft/mssql-server-linux:latest
+    # dns_search: example.com
+    volumes:
+      # we copy our scripts onto the container
+      - ./:/usr/src/app
+    # bash will be executed from that path, our scripts folder
+    working_dir: /usr/src/app
+    # run the entrypoint.sh that will import the data AND sqlserver
+    command: sh -c ' chmod +x ./entrypoint.sh; ./entrypoint.sh & /opt/mssql/bin/sqlservr;'
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD
+      - SCRIPT_DB_NAME
+    ports:
+      - 127.0.0.1:1433:1433 # Only accessible from localhost

@@ -1,0 +1,14 @@
+{
+    "team": [
+        {
+            "name": "First Last",
+            "email": "email@example.com",
+            "id": "user_name",
+            "uid": "1000",
+            "public_keys": [
+                "ssh-rsa XXXXXXXXXXXXXXXXXXXXXXX my_key",
+                "ssh-rsa XXXXXXXXXXXXXXXXXXXXXXX my_other_key"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,4 @@
+# Line ending issues for Bash scripts on Windows #
+##################################################
+*.sh -crlf
+give-access-to -crlf

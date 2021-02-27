@@ -1,0 +1,274 @@
+#!/usr/bin/env bash
+# Script to give one of our team members access to a server. You can run the
+# script locally on a host, or you can specify SSH parameters to have the script
+# run on a remote host.
+
+# Alex Coleman
+
+# Set constants
+team_file="team.json"
+user_file="user.json"
+user_shell="/bin/bash"
+sudoer_rules="/etc/sudoers.d/100-admin-users"
+status_error=1
+status_okay=0
+
+# Default to no sudo privileges
+give_sudo="false"
+
+echo_help () {
+    echo "Usage: ${BASH_SOURCE[0]} [OPTIONS] TEAM_MEMBER... [-s] SUDO_MEMBER..."
+    echo ""
+    echo "This scripts uses the public keys in team.json to grant SSH access to"
+    echo "a specified host. It requires sudo privileges on the target host, and"
+    echo "can be run remotely or locally."
+    echo ""
+    echo "OPTIONS"
+    echo "  -h|--help           Displays this help message."
+    echo "  -s|--give-sudo      Give the following users password-less sudo privileges."
+    echo ""
+    echo "REMOTE OPERATION OPTIONS"
+    echo "  -k|--ssh-key  KEY   Connect to a remote host to apply the script to using this key."
+    echo "  -o|--ssh-host HOST  Connect to this remote host to apply the script to."
+    echo "  -u|--ssh-user USER  Connect to a remote host to apply the script to as this user."
+    echo ""
+    echo "TEAM_MEMBER   The team member ID(s) that you want to give access to,"
+    echo "              separated by spaces."
+    echo "SUDO_MEMBER   The team member ID(s) that you want to give password-less"
+    echo "              sudo privileges to."
+}
+
+# If jq is not an executable command, install it.
+get_jq () {
+    if [ ! -x "$(command -v jq)" ]; then
+        echo "${BASH_SOURCE[0]}:WARNING: jq wasn't found; it will now be installed." >&2
+        sudo apt-get update > /dev/null
+        sudo apt install -q jq
+    fi
+}
+
+# Create a user with authorized public keys for a given team member, and grant
+# them passwordless sudo permissions if requested.
+add_team_member () {
+    # If jq is not an executable command, install it.
+    get_jq
+
+    # Create the user_file
+    if jq --arg tm "$1" '.team[] | select(.id==$tm)' $team_file > \
+            "/tmp/$user_file"; then
+        echo "${BASH_SOURCE[0]}: Created the $user_file JSON file."
+    else
+        echo "${BASH_SOURCE[0]}:ERROR: Could not create the $user_file JSON file. Stopping ${BASH_SOURCE[0]}." >&2
+        exit $status_error
+    fi
+
+    # If the file is zero bytes or does not exist, exit early
+    if [ ! -s "/tmp/$user_file" ]; then
+        echo "${BASH_SOURCE[0]}:ERROR: No results were returned from the team file. Check that you are using the correct ID(s)." >&2
+        exit $status_error
+    fi
+
+    # Get the Name/Email/ID/UID of the team_member
+    member_id=$(jq --raw-output '.id' "/tmp/$user_file")
+    member_uid=$(jq --raw-output '.uid' "/tmp/$user_file")
+
+    # Create the user in the target environment
+    if sudo useradd --create-home --user-group --shell "$user_shell" \
+            --uid "$member_uid" "$member_id"; then
+        echo "${BASH_SOURCE[0]}: Created the $member_id user."
+    else
+        echo "${BASH_SOURCE[0]}:WARNING: Adding a user $member_id failed. That username or uid may already exist." >&2
+    fi
+    home_dir=$(eval echo ~"$member_id")
+
+    # Move the user_file and set permissions (uses ~ alias for home directory).
+    if sudo cp -f "/tmp/$user_file" "$home_dir/"; then
+        echo "${BASH_SOURCE[0]}: Copied the $user_file JSON file to $home_dir/$user_file."
+    else
+        echo "${BASH_SOURCE[0]}:ERROR: Could not copy the $user_file JSON file to the new home directory. Stopping ${BASH_SOURCE[0]}." >&2
+        exit $status_error
+    fi
+    sudo chmod 644 "$home_dir/$user_file"
+    sudo chown "$member_id:$member_id" "$home_dir/$user_file"
+
+    # If ~$member_id/.ssh/ doesn't exist, create it
+    ssh_dir="$home_dir/.ssh"
+    if [ ! -d "$ssh_dir" ]; then
+        sudo mkdir "$ssh_dir"
+        sudo chmod 700 "$ssh_dir"
+        sudo chown "$member_id:$member_id" "$ssh_dir"
+        echo "${BASH_SOURCE[0]}: Created the ssh directory: $ssh_dir."
+    fi
+
+    # Append the team_member's public key(s) to the authorized_keys of the new user
+    key_file="$ssh_dir/authorized_keys"
+    readarray -t new_keys <<< "$(jq --raw-output '.public_keys[]' "$user_file")"
+    for new_key in "${new_keys[@]}"; do
+        if sudo grep "$new_key" "$key_file" > /dev/null; then
+            echo "${BASH_SOURCE[0]}:INFO: This key already exists for $member_id."
+        else
+            if echo "$new_key" | sudo tee --append "$key_file" > /dev/null; then
+                echo "${BASH_SOURCE[0]}:INFO: Added public key for $member_id."
+            else
+                echo "${BASH_SOURCE[0]}:ERROR: Could not add public key for $member_id." >&2
+            fi
+        fi
+    done
+    if jq --raw-output '.public_keys[]' "/tmp/$user_file" | sudo tee --append "$key_file" > /dev/null; then
+        echo "${BASH_SOURCE[0]}: Added public keys for $member_id to $key_file"
+        sudo chown "$member_id:$member_id" "$key_file"
+    else
+        echo "${BASH_SOURCE[0]}:ERROR: Could not add public keys to the authorized_keys file. Stopping ${BASH_SOURCE[0]}." >&2
+        exit $status_error
+    fi
+
+    # Remove the user.json at the end
+    sudo rm "/tmp/$user_file"
+
+    # If the current team member is in the list of sudo members specified, give
+    #   that team member password-less sudo privileges.
+    case "${sudo_users[@]}" in
+        *"$1"*)
+            make_sudo "$member_id"
+            ;;
+    esac
+}
+
+# Give the user passwordless sudo privileges.
+# https://askubuntu.com/questions/192050/how-to-run-sudo-command-with-no-password
+make_sudo () {
+    # Add the user as sudo.
+    sudo usermod -a -G sudo "$1"
+
+    # If there isn't a sudoers.d rules file, make one.
+    if sudo test ! -f "$sudoer_rules"; then
+        # Add an empty file with chmod 440.
+        sudo install -m 440 /dev/null "$sudoer_rules"
+        echo "# Created by ${BASH_SOURCE[0]} on $(date)" | sudo tee --append "$sudoer_rules"
+    fi
+
+    # Check to see if this user already has been added to this file
+    if sudo grep "^[^#]*$1.*$" "$sudoer_rules"> /dev/null; then
+        echo "${BASH_SOURCE[0]}:INFO: $1 already has been added to $sudoer_rules, skipping."
+    else
+        # Make the user not require a password for sudo.
+        echo "# Added $1 by ${BASH_SOURCE[0]} on $(date)" | sudo tee --append "$sudoer_rules"
+        echo "$1 ALL=(ALL) NOPASSWD:ALL" | sudo tee --append "$sudoer_rules"
+        echo "${BASH_SOURCE[0]}:INFO: Gave $1 password-less sudo privileges."
+    fi
+}
+
+# Check that a parameter flag has a matching input
+check_missing_parameter () {
+    if [ -z "$2" ] || [ "${2:0:1}" == "-" ]; then
+        echo "${BASH_SOURCE[0]}:ERROR: $1 must be given an argument. Stopping ${BASH_SOURCE[0]}." >&2
+        echo_help
+        exit $status_error
+    fi
+}
+
+################################################################################
+# MAIN
+################################################################################
+
+# Handle inputs
+if [[ $# -eq 0 ]]; then
+    echo_help
+    exit $status_okay
+fi
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -h|--help)
+            echo_help
+            exit $status_okay
+            ;;
+
+        -k|--ssh-key)
+            check_missing_parameter "$key" "$2"
+            if [ ! -r "$2" ]; then
+                echo "${BASH_SOURCE[0]}:ERROR: Could not find SSH Key ($2). Stopping ${BASH_SOURCE[0]}." >&2
+                exit $status_error
+            fi
+            ssh_key="$2"
+            shift
+            shift
+            ;;
+
+        -o|--ssh-host)
+            check_missing_parameter "$key" "$2"
+            ssh_host="$2"
+            shift
+            shift
+            ;;
+
+        -s|--give-sudo)
+            give_sudo="true"
+            shift
+            ;;
+
+        -u|--ssh-user)
+            check_missing_parameter "$key" "$2"
+            ssh_user="$2"
+            shift
+            shift
+            ;;
+
+        -*)
+            echo "${BASH_SOURCE[0]}:ERROR: Unrecognized input $key. Stopping ${BASH_SOURCE[0]}." >&2
+            exit $status_error
+            ;;
+
+        *)
+            team_members+=("$key")
+            if [ "$give_sudo" == "true" ]; then
+                sudo_users+=("$key")
+            else
+                non_sudo_users+=("$key")
+            fi
+            shift
+            ;;
+    esac
+done
+
+# Send the script to the target host and run, or add the team members locally.
+if [ ! -z "$ssh_key" ] || [ ! -z "$ssh_user" ] || [ ! -z "$ssh_host" ]; then
+    if [ -z "$ssh_key" ] || [ -z "$ssh_user" ] || [ -z "$ssh_host" ]; then
+        echo "${BASH_SOURCE[0]}:ERROR: If you wish to connect to a remote host, the SSH Key, SSH User, and SSH Host must all be specified. Stopping ${BASH_SOURCE[0]}." >&2
+        echo_help
+        exit $status_error
+    fi
+
+    # Copy over the required files
+    if scp -i "$ssh_key" "$team_file" "$ssh_user@$ssh_host:/tmp/"; then
+        echo "${BASH_SOURCE[0]}:INFO: Copied $team_file to $ssh_user@$ssh_host:/tmp/$team_file using $ssh_key."
+    else
+        echo "${BASH_SOURCE[0]}:ERROR: Could not copy $team_file to $ssh_user@$ssh_host:/tmp/$team_file using $ssh_key." >&2
+        exit $status_error
+    fi
+    if scp -i "$ssh_key" "${BASH_SOURCE[0]}" "$ssh_user@$ssh_host:/tmp/"; then
+        echo "${BASH_SOURCE[0]}:INFO: Copied ${BASH_SOURCE[0]} to $ssh_user@$ssh_host:/tmp/${BASH_SOURCE[0]} using $ssh_key."
+    else
+        echo "${BASH_SOURCE[0]}:ERROR: Could not copy ${BASH_SOURCE[0]} to $ssh_user@$ssh_host:/tmp/${BASH_SOURCE[0]} using $ssh_key." >&2
+        exit $status_error
+    fi
+
+    # Run the command remotely
+    if [ "$give_sudo" == "true" ]; then
+        ssh_command="cd /tmp; ${BASH_SOURCE[0]} ${non_sudo_users[*]} -s ${sudo_users[*]}"
+    else
+        ssh_command="cd /tmp; ${BASH_SOURCE[0]} ${non_sudo_users[*]}"
+    fi
+    if ssh -i "$ssh_key" "$ssh_user@$ssh_host" "$ssh_command"; then
+        echo "${BASH_SOURCE[0]}:INFO: Ran the script remotely on $ssh_host as $ssh_user using $ssh_key."
+    else
+        echo "${BASH_SOURCE[0]}:ERROR: Failed to run the script remotely on $ssh_host as $ssh_user using $ssh_key." >&2
+        exit $status_error
+    fi
+else
+    # Add the team members as users to the localhost
+    echo "${BASH_SOURCE[0]}:INFO: Running ${BASH_SOURCE[0]} locally."
+    for team_member in "${team_members[@]}"; do
+        add_team_member "$team_member"
+    done
+fi

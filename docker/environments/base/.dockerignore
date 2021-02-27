@@ -1,0 +1,3 @@
+# Exclude the following from the Docker Build Context
+
+Dockerfile

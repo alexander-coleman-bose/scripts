@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Script to update scripts repos with most recent package config
+# [WIP] Script to update scripts repos with most recent package config
 
 # If no input
 if [ -z "$1" ]; then

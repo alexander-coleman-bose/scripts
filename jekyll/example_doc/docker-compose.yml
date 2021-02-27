@@ -1,0 +1,17 @@
+# This file defines a run-time configuration for running the Jekyll site
+# locally during development.
+version: '3'
+
+services:
+  # This service makes the site only accessible to the localhost.
+  jekyll:
+    image: jekyll/jekyll:latest
+    container_name: jekyll_docs
+    environment:
+      - JEKYLL_ENV=docker
+    command: jekyll serve --force_polling --livereload
+    ports:
+      - 127.0.0.1:4000:4000
+      - 127.0.0.1:35728:35728
+    volumes:
+      - ./:/srv/jekyll
