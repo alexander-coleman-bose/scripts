@@ -63,7 +63,7 @@ install_wireshark () {
         sudo apt install -y wireshark
         sudo dpkg-reconfigure wireshark-common
     else
-        echo "VS Code already installed."
+        echo "wireshark already installed."
     fi
 }
 

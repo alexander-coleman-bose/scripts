@@ -1,4 +1,7 @@
-# Line ending issues for Bash scripts on Windows #
-##################################################
-*.sh -crlf
-give-access-to -crlf
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# These files should have specific line endings
+*.sh    text eol=lf
+*.bat   text eol=crlf
+give-access-to text eol=lf
