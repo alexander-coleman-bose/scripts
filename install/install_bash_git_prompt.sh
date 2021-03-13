@@ -33,6 +33,12 @@ if [ "$choice" == "y" ]; then
     # shellcheck disable=SC2129
     echo -e "\n" >> ~/.bashrc
     echo "# Appended by magicmonty/bash-git-prompt" >> ~/.bashrc
-    echo "GIT_PROMPT_ONLY_IN_REPO=1" >> ~/.bashrc
+    echo "GIT_PROMPT_ONLY_IN_REPO=0" >> ~/.bashrc
+    echo "GIT_PROMPT_FETCH_REMOTE_STATUS=0" >> ~/.bashrc
+
+    source ~/.bash-git-prompt/gitprompt.sh
+    git_prompt_make_custom_theme
+
+    echo "GIT_PROMPT_THEME=Custom" >> ~/.bashrc
     echo "source ~/.bash-git-prompt/gitprompt.sh" >> ~/.bashrc
 fi
