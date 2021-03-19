@@ -73,6 +73,10 @@ add_team_member () {
     member_uid=$(jq --raw-output '.uid' "/tmp/$user_file")
 
     # Create the user in the target environment
+    #TODO: Check if the user exists in /etc/passwd first
+    #TODO: Check if the UID already exists in /etc/passwd, get GID if so
+    #TODO: Check if the user group exists in /etc/group
+    #TODO: Check if the home directory exists in /home
     if sudo useradd --create-home --user-group --shell "$user_shell" \
             --uid "$member_uid" "$member_id"; then
         echo "${BASH_SOURCE[0]}: Created the $member_id user."
