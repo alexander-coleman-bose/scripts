@@ -51,6 +51,20 @@ exclude:
   - "Gemfile"
   - "Gemfile.lock"
 
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-relative-links
+
+compress_html:
+  clippings: all
+  comments: all
+  endings: all
+  startings: []
+  blanklines: false
+  profile: false
+
 ################################################################################
 # Theme Settings
 ################################################################################
@@ -107,6 +121,10 @@ aux_links:
 # Makes Aux links open in a new tab. Default is false
 aux_links_new_tab: true
 
+# Sort order for navigation links
+nav_sort: case_insensitive # default, equivalent to nil
+# nav_sort: case_sensitive # Capital letters sorted before lowercase
+
 ################################################################################
 # Footer Content
 ################################################################################
@@ -129,17 +147,3 @@ gh_edit_repository: "https://github.com/MyOrg/MyRepo" # the github URL for your 
 gh_edit_branch: "main" # the branch that your docs is served from
 gh_edit_source: docs # the source folder that your files originate from
 gh_edit_view_mode: "edit" # "tree" or "edit" if you want the user to jump into the editor immediately
-
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
-  - jekyll-sitemap
-  - jekyll-relative-links
-
-compress_html:
-  clippings: all
-  comments: all
-  endings: all
-  startings: []
-  blanklines: false
-  profile: false
