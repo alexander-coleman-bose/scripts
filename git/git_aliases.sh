@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Alex Coleman
+# Alex St. Amour
 # 2021/02/26
 
 echo "Setting Git aliases..."

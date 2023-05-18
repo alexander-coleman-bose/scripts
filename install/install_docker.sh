@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Installs Docker Community Edition on Ubuntu platform
 
-# Alex Coleman
+# Alex St. Amour
 # 2018/10/02
 
 echo "Installing Docker..."

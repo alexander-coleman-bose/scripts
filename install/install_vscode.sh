@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Installs Visual Studio Code
 
-# Alex Coleman
+# Alex St. Amour
 # 2018/10/15
 
 echo "Installing VS Code..."

@@ -11,7 +11,7 @@ function encodedVal = encodeBase64(varargin)
     %
     %See also: decodeBase64, typecast, matlab.net.base64encode
 
-    % Alex Coleman
+    % Alex St. Amour
 
     parser = inputParser;
     parser.addRequired('decodedVal', @mustBeReal);

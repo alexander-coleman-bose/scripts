@@ -31,7 +31,7 @@ function obj = setup(varargin)
     %See also: logging, logging.getLogger,
     %   logging.Logger, datetime.Format
 
-    % Alex Coleman
+    % Alex St. Amour
 
     parser = inputParser;
     parser.addOptional('logLevel', string(logging.LogLevel.Info), @validators.mustBeStringLike);

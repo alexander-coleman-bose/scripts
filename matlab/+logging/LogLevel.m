@@ -20,7 +20,7 @@ classdef LogLevel
     %
     %See also: logging
 
-    % Alex Coleman
+    % Alex St. Amour
 
     properties (GetAccess = public, SetAccess = immutable)
         Value(1,1) double % The numeric value of the LogLevel.

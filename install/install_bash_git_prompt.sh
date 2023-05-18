@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Installs custom bash git prompt
 
-# Alex Coleman
+# Alex St. Amour
 # 2018/10/15
 
 echo "Installing a custom git prompt (magicmonty/bash-git-prompt)"

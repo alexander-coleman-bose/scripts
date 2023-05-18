@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Installs Anaconda3 5.2.0
 
-# Alex Coleman
+# Alex St. Amour
 # 2018/10/15
 
 echo "Installing Anaconda3..."

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Installs git and git-lfs
 
-# Alex Coleman
+# Alex St. Amour
 # 2018/10/15
 
 echo "Updating git and installing Git LFS..."

@@ -5,7 +5,7 @@
 
 # https://help.github.com/en/enterprise/2.17/admin/installation/migrating-to-a-different-git-large-file-storage-server
 
-# Alex Coleman
+# Alex St. Amour
 
 # Get the original directory
 ORIG_PWD="$PWD"

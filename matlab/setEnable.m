@@ -12,7 +12,7 @@ function setEnable(obj, onOff)
     %   obj (matlab.apps.AppBase): App to set Enable for.
     %   onOff (logical): True or False, sets Enable to this value.
 
-    % Alex Coleman
+    % Alex St. Amour
 
     narginchk(2, 2);
     mustBeNumericOrLogical(onOff);

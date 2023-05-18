@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Alex Coleman
+# Alex St. Amour
 # 2018/09/23
 
 set -e

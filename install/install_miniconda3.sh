@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Download and execute miniconda3 installer script
-# Alex Coleman
+# Alex St. Amour
 
 TMP_DIR=/tmp
 INSTALL_DIR=${1:-$HOME/miniconda3}

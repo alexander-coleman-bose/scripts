@@ -6,7 +6,7 @@ function obj = getLogger
     %
     %See also: logging, logging.Logger.getLogger
 
-    % Alex Coleman
+    % Alex St. Amour
 
     obj = logging.Logger.getLogger;
 end % function

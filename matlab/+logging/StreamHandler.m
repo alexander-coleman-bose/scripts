@@ -21,7 +21,7 @@ classdef StreamHandler < logging.Handler
     %See also: logging, logging.StreamHandler.StreamHandler,
     %   logging.Handler, logging.Logger.addHandler
 
-    % Alex Coleman
+    % Alex St. Amour
 
     properties (Access = public)
         Name = mfilename('class') % The Name of the Handler, used to determine whether a Handler is unique. (Default: "StreamHandler")

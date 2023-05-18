@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Script to start/find ssh-agent on login
-# Author: Alex Coleman
+# Author: Alex St. Amour
 # Source: https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login
 # Automatically finds or starts ssh-agent PID and saves PID to SSH_ENV
 SSH_ENV="$HOME/.ssh/environment"

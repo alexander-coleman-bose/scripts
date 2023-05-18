@@ -6,7 +6,7 @@ function mustBeUiListbox(obj)
     %
     %See also: validators, validators.mustBeListbox
 
-    % Alex Coleman
+    % Alex St. Amour
 
     if ~isa(obj, 'matlab.ui.control.ListBox')
         errorId = 'validators:mustBeUiListbox:InvalidInput';

@@ -6,7 +6,7 @@ function mustBeListbox(obj)
     %
     %See also: validators, validators.mustBeUiListbox
 
-    % Alex Coleman
+    % Alex St. Amour
 
     if isempty(obj) || ~isa(obj, 'matlab.ui.control.UIControl') || ~strcmp(obj.Style, 'listbox')
         errorId = 'validators:mustBeListbox:InvalidInput';

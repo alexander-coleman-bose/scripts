@@ -6,7 +6,7 @@ function chosenWords = randomWord(varargin)
     %Optional Inputs:
     %   numObj (double): Number of words to pick.
 
-    % Alex Coleman
+    % Alex St. Amour
 
     % Handle inputs
     parser = inputParser;

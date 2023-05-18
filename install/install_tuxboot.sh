@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Installs tuxboot
 
-# Alex Coleman
+# Alex St. Amour
 # 2018/10/16
 
 echo "Installing tuxboot..."

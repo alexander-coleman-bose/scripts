@@ -15,7 +15,7 @@ classdef HandlerType
     %   logging.FileHandler, logging.ListboxHandler,
     %   logging.UiListboxhandler
 
-    % Alex Coleman
+    % Alex St. Amour
 
     properties (GetAccess = public, SetAccess = immutable)
         Constructor % A function handle to the constructor of the associated HandlerType

@@ -1,6 +1,6 @@
 # Scripts
 
-**Author:** Alex Coleman
+**Author:** Alex St. Amour
 
 ## Disclaimer
 

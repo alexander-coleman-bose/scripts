@@ -21,7 +21,7 @@ classdef UiListboxHandler < logging.Handler
     %See also: logging, logging.UiListboxHandler.UiListboxHandler,
     %   logging.Handler, logging.Logger.addHandler
 
-    % Alex Coleman
+    % Alex St. Amour
 
     properties (Access = public)
         Name = mfilename('class') % The Name of the Handler, used to determine whether a Handler is unique. (Default: "UiListboxHandler")

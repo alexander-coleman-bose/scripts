@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Writes an .iso to a disk partition (USB drive)
 
-# Alex Coleman
+# Alex St. Amour
 # 2018/10/16
 
 STATUS_HELP=1

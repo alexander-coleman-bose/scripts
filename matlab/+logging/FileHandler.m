@@ -20,7 +20,7 @@ classdef FileHandler < logging.Handler
     %See also: logging, logging.FileHandler.FileHandler,
     %   logging.Handler, logging.Logger.addHandler
 
-    % Alex Coleman
+    % Alex St. Amour
 
     properties (Access = public)
         Name = mfilename('class') % The name of the Handler; determines the name of the file to write to. (Default: "FileHandler")

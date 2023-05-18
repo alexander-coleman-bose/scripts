@@ -3,7 +3,7 @@
 # script locally on a host, or you can specify SSH parameters to have the script
 # run on a remote host.
 
-# Alex Coleman
+# Alex St. Amour
 
 # Set constants
 team_file="team.json"

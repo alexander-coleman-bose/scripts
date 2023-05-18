@@ -60,7 +60,7 @@ classdef Logger < handle
     %   logging.getLogger, logging.Logger.addHandler,
     %   logging.LogLevel
 
-    % Alex Coleman
+    % Alex St. Amour
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % PROPERTIES

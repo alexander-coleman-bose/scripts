@@ -16,7 +16,7 @@
 #   python
 #   mssql-scripter
 
-# Alex Coleman
+# Alex St. Amour
 
 # Set constants
 this=script-db.sh

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Script to build the docker images manually and bootstrap a build environment.
-# Author: Alex Coleman
+# Author: Alex St. Amour
 
 # Get the absolute path of the environments folder.
 docker_images="$( cd "$( dirname "${BASH_SOURCE[0]}" )/environments" >/dev/null && pwd )"

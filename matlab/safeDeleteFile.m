@@ -1,7 +1,7 @@
 function safeDeleteFile(fileName, varargin)
     %SAFEDELETEFILE Attempt to delete a file, but convert any errors to warnings.
 
-    % Alex Coleman
+    % Alex St. Amour
 
     parser = inputParser;
     parser.addRequired('fileName');

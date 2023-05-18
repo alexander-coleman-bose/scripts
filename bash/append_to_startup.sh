@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # append_to_startup.sh
-# Author: Alex Coleman
+# Author: Alex St. Amour
 
 # Appends content from a file to your ~/.bashrc, ~/.profile, or any file. This
 # function ensures that exactly one empty line exists between the last non-empty

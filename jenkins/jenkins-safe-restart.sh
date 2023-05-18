@@ -2,7 +2,7 @@
 # jenkins-safe-restart.sh
 # Requires the curl command, and a Jenkins API Token with admin permissions
 
-# Alex Coleman
+# Alex St. Amour
 
 this='jenkins-safe-restart.sh'
 JENKINS_URL='example.com/jenkins'
