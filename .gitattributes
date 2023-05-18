@@ -6,3 +6,4 @@
 *.bat           text    eol=crlf
 give-access-to  text    eol=lf
 .zsh_aliases    text    eol=lf
+.bash_aliases   text    eol=lf
