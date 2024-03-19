@@ -31,6 +31,7 @@ git config --global --replace-all alias.ls 'log --pretty=format:"%C(yellow)%h %C
 git config --global --replace-all alias.ll 'log --pretty=format:"%C(yellow)%h %Cred%cr %Cblue(%an)%C(cyan)%d%Creset %s" --decorate --stat'
 git config --global --replace-all alias.po 'push origin'
 git config --global --replace-all alias.plo 'pull origin'
+git config --global --replace-all alias.pushf 'push --force-with-lease'
 git config --global --replace-all alias.rim 'rebase -i main'
 git config --global --replace-all alias.rimm 'rebase -i master'
 git config --global --replace-all alias.rpo 'remote prune origin'
