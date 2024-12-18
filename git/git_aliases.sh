@@ -37,6 +37,8 @@ git config --global --replace-all alias.cloneall 'clone --recurse-submodules'
 # git fetch
 git config --global --replace-all alias.fall 'fetch --all'
 
+git config --global --replace-all alias.lsi 'ls-files --others --ignored --exclude-standard'
+
 # git log
 git config --global --replace-all alias.ll 'log --pretty=format:"%C(yellow)%h %Cred%cr %Cblue(%an)%C(cyan)%d%Creset %s" --decorate --stat'
 git config --global --replace-all alias.ls 'log --pretty=format:"%C(yellow)%h %Cred%cr %Cblue(%an)%C(cyan)%d%Creset %s" --decorate'
